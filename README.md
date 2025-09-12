@@ -45,4 +45,4 @@ build/g2lint --evasion-profile path/to/profile
 
 ## Known Errors
 
-- Due to the way the kdl-go library parses kdl, if two listeners have the same name, only the second listener will be parsed
+- Due to the way the kdl-go library parses kdl, if two listeners have the same name, the server profile will parse correctly

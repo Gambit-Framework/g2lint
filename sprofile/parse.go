@@ -83,7 +83,7 @@ func (sp ServerProfile) validateOperators() (err error) {
 	}
 
 	for username, details := range sp.Operators.Users {
-		if details.(map[string]any)["password"].(string) == "" {
+		if details.(map[string]any)["password"] == nil {
 			return fmt.Errorf("user %s is missing password field", username)
 		}
 	}
@@ -94,7 +94,7 @@ func (sp ServerProfile) validateListeners() (err error) {
 	var ports []int64
 
 	for lName, details := range sp.Listeners.HttpListeners {
-		if details.(map[string]any)["bind-host"].(string) == "" {
+		if details.(map[string]any)["bind-host"] == nil {
 			return fmt.Errorf("listener %s is missing bind-host field", lName)
 		}
 
@@ -126,7 +126,7 @@ func (sp ServerProfile) validateListeners() (err error) {
 			}
 		}
 
-		if details.(map[string]any)["bind-port"].(int64) == 0 {
+		if details.(map[string]any)["bind-port"] == nil {
 			return fmt.Errorf("listener %s is missing bind-port field", lName)
 		}
 		if slices.Contains(ports, details.(map[string]any)["bind-port"].(int64)) {
@@ -138,19 +138,27 @@ func (sp ServerProfile) validateListeners() (err error) {
 			return fmt.Errorf("invalid bind port  for listener %s", lName)
 		}
 
-		if details.(map[string]any)["user-agent"].(string) == "" {
+		if details.(map[string]any)["hosts"] == nil {
+			return fmt.Errorf("listener %s is missing hosts field", lName)
+		}
+
+		if details.(map[string]any)["port"] == nil {
+			return fmt.Errorf("listener %s is missing port field", lName)
+		}
+
+		if details.(map[string]any)["user-agent"] == nil {
 			return fmt.Errorf("listener %s is missing user-agent field", lName)
 		}
 
-		if details.(map[string]any)["headers"].(string) == "" {
+		if details.(map[string]any)["headers"] == nil {
 			return fmt.Errorf("listener %s is missing headers field", lName)
 		}
 
-		if details.(map[string]any)["uris"].(string) == "" {
+		if details.(map[string]any)["uris"] == nil {
 			return fmt.Errorf("listener %s is missing uris field", lName)
 		}
 
-		if details.(map[string]any)["method"].(string) == "" {
+		if details.(map[string]any)["method"] == nil {
 			return fmt.Errorf("listener %s is missing method field", lName)
 		}
 
@@ -187,6 +195,8 @@ func (sp ServerProfile) printVerboseData() {
 		fmt.Printf("Listener Name:\t%s\n", lName)
 		fmt.Printf("Bind Host:\t%s\n", details.(map[string]any)["bind-host"].(string))
 		fmt.Printf("Bind Port:\t%d\n", details.(map[string]any)["bind-port"].(int64))
+		fmt.Printf("Hosts:\t\t%s\n", details.(map[string]any)["hosts"].(string))
+		fmt.Printf("Port:\t\t%d\n", details.(map[string]any)["port"].(int64))
 		fmt.Printf("User Agent:\t%s\n", details.(map[string]any)["user-agent"].(string))
 		fmt.Printf("Headers:\t%s\n", details.(map[string]any)["headers"].(string))
 		fmt.Printf("Uris:\t\t%s\n", details.(map[string]any)["uris"].(string))
